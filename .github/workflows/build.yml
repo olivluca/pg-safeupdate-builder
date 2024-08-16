@@ -26,9 +26,9 @@ jobs:
         run: |
          cd postgresql-15.4
          src\tools\msvc\build.bat
-      - name: Upload artifacts for mbedtls/Win32
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-         name: pg-safeupdate
+         name: pg-safeupdate-15.4
          path: |
            postgresql-15.4/Release/safeupdate
