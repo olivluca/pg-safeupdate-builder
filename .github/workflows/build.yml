@@ -1,0 +1,34 @@
+name: build pg-safeupdate
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build_windows:
+    runs-on: windows-latest
+    steps:
+      - uses: ilammy/msvc-dev-cmd@v1.13.0
+      - name: Get postgres
+        run: |
+          curl https://ftp.postgresql.org/pub/source/v15.4/postgresql-15.4.tar.gz --output postgresql.tar.gz
+      - name: Extract postgres    
+        uses: a7ul/tar-action@v1.2.0
+        id: extract
+        with:
+          command: x
+          cwd: .
+          files: postgresql.tar.gz
+      - name: Get pg-safeupdate
+        run: |
+          cd postgresql-15.4\contrib
+          git clone https://github.com/eradman/pg-safeupdate
+      - name: Build
+        run: |
+         cd postgresql-15.4
+         src\tools\msvc\build.bat
+      - name: Upload artifacts for mbedtls/Win32
+        uses: actions/upload-artifact@v4
+        with:
+         name: pg-safeupdate
+         path: |
+           postgresql-15.4/Release/safeupdate
